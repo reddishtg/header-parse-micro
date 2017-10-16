@@ -35,8 +35,15 @@ app.route('/_api/package.json')
   
 app.route('/')
     .get(function(req, res) {
-		  res.sendFile(process.cwd() + '/views/index.html');
-    })
+		  // res.sendFile(process.cwd() + '/views/index.html');
+  var obj = {
+    ipaddress : req.headers['x-forwarded-for'].split(',')[0],
+    language : req.headers['accept-language'].split(',')[0],
+    software: /\((.+?)\)/.exec(req.headers['user-agent'])[1]
+  }
+    res.end(JSON.stringify(obj))
+});
+
 
 // Respond not found to all the wrong routes
 app.use(function(req, res, next){
